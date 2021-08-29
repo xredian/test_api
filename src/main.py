@@ -1,5 +1,6 @@
 import sqlalchemy.exc
 from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 from src.database import get_db
 from src.models import Employee
@@ -36,6 +37,21 @@ def create(employee: EmployeeCard, db: Session = Depends(get_db)):
         "created_id": new_employee.id,
         "personnel_number": new_employee.personnel_number
     }
+
+
+@app.get('/', response_class=HTMLResponse)
+def start_page():
+    return """
+    <html>
+        <head>
+            <title>Start page</title>
+        </head>
+        <body>
+            <h1>Service with web API for handling list of employees using FastAPI</h1>
+            <p>Please go to <a href="/docs">127.0.0.1:8000/docs</a> to use the service</p>
+        </body>
+    </html>
+    """
 
 
 @app.get('/employees')
